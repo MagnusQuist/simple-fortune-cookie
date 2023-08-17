@@ -18,8 +18,8 @@ jobs:
         with:
           go-version: 1.21.0
 
-      - name: Navigate to Frontend Directory
-        run: cd /home/runner/work/simple-fortune-cookie/simple-fortune-cookie/frontend
+      - name: Check the GitHub Actions environment structure
+        run: ls
 
       - name: Run Frontend Tests
         run: go test
