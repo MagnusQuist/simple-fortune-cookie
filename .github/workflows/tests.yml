@@ -3,7 +3,7 @@ name: Continuous Integration Tests
 on:
   push:
     branches:
-      - main
+      - main_GH-1_rhe_github-tests
 
 jobs:
   build:
