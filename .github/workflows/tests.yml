@@ -1,9 +1,9 @@
 name: Continuous Integration Tests
 
 on:
-  push:
+  pull_request:
     branches:
-      - main_GH-1_rhe_github-tests
+      - main
 
 jobs:
   build:
