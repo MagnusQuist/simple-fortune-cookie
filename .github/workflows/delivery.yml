@@ -1,0 +1,26 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21.0
+
+      - name: Build and Deploy
+        run: |
+          chmod +x scripts/deploy.sh && scripts/deploy.sh ${{ github.ref }}
