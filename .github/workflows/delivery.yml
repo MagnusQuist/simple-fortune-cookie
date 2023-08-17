@@ -23,4 +23,4 @@ jobs:
 
       - name: Build and Deploy
         run: |
-          ./deploy.sh ${{ github.ref }}
+          ../../scripts/deploy.sh ${{ github.ref }}

@@ -17,28 +17,28 @@ case "$BRANCH_NAME" in
     ;;
 
   "staging")
-    # Deployment for staging environment
+    # Deployment for development environment
     cd frontend
     go build
-    ./frontend-staging &
+    ./frontend &
     cd ..
 
     cd backend
     go build
-    ./backend-staging &
+    ./backend &
     cd ..
     ;;
 
   "main"|"master") # Adapt based on your main branch name
-    # Deployment for production environment
+    # Deployment for development environment
     cd frontend
     go build
-    ./frontend-prod &
+    ./frontend &
     cd ..
 
     cd backend
     go build
-    ./backend-prod &
+    ./backend &
     cd ..
     ;;
 
