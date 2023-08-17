@@ -19,7 +19,7 @@ jobs:
           go-version: 1.21.0
 
       - name: Navigate to Frontend Directory
-        run: cd ./frontend
+        run: cd frontend
 
       - name: Run Frontend Tests
         run: go test
