@@ -1,26 +1,62 @@
-name: Build and Deploy
+name: Delivery
 
 on:
   push:
     branches:
-      - '*'
-  pull_request:
+      - main
+  pull-request:
     branches:
-      - '*'
-
+      - main
+env:
+  docker_username: ${{ github.actor }}
+  docker_password: ${{ secrets.GITHUB_TOKEN }}
+  GIT_COMMIT: ${{ github.sha }}
 jobs:
-  deploy:
+  Clone-down:
+    name: Clone down repo
     runs-on: self-hosted
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Configure Go
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@3
+      - name: Upload Repo
+        uses: actions/upload-artifact@v3
         with:
-          go-version: 1.21.0
-
-      - name: Build and Deploy
+          name: code
+          path: .
+  Build:
+    runs-on: self-hosted
+    needs: Clone-down
+    steps:
+      - name: Download code
+        uses: actions/download-artifact@v3
+        with:
+          name: code
+          path: .
+      - name: Build Application
+        run: chmod +x scripts/build-app.sh && script/build-app.sh
+      - name: Upload repo
+        uses: actions/upload-artifact@v3
+        with:
+          name: code
+          path: .
+  Docker-image:
+    runs-on: self-hosted
+    needs: Build
+    permissions:
+      packages: write
+    steps:
+      - name: Download code
+        uses: actions/download-artifact@v3
+        with:
+          name: code
+          path: .
+      - name: Build docker
+        run: chmod +x scripts/build-docker.sh && scripts/build-docker.sh
+      - name: Push docker
+        run: chmod +x scripts/push-docker.sh && scripts/push-docker.sh
+  Deploy:
+    runs-on: self-hosted
+    needs: Docker-image
+    steps:
+      - name: Deploy
         run: |
-          chmod +x scripts/deploy.sh && scripts/deploy.sh ${{ github.ref }}
+            chmod +x scripts/deploy.sh && scripts/deploy.sh ${{ github.ref }}
